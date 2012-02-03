@@ -30,6 +30,17 @@
     >>> calc.enter('/')
     0.6
     
+    >>> calc.limpapilha()
+    >>> calc.pilha()
+    []
+    >>> calc.enter(10)
+    >>> calc.pilha()
+    [10.0]
+    >>> calc.enter('+')
+    20.0
+    >>> calc.pilha()
+    []
+        
 """
 
 import operator as op
@@ -61,7 +72,11 @@ class RPN():
                 self._pilha.append(resultado)
                 return resultado
             elif len(self._pilha)==1:
-                return self.OPS(value)(self._pilha[0],self._pilha[0])
+                resultado = self.OPS[value](self._pilha[0],self._pilha[0])
+                self._pilha[0] = resultado
+                self.limpapilha()
+                return resultado 
+                
             else:
                 pass
             
@@ -70,7 +85,7 @@ class RPN():
         print self._pilha
     
     def limpapilha(self):
-        _pilha=[]
+        self._pilha = []
                 
 if __name__ == "__main__":
     import doctest
