@@ -27,8 +27,8 @@
     25.0
     >>> calc.pilha()
     [15.0, 25.0]
-    >>> calc.enter('/')
-    0.6
+    >>> calc.enter('/') == 0.6
+    True
     
     >>> calc.limpapilha()
     >>> calc.pilha()
@@ -40,7 +40,9 @@
     20.0
     >>> calc.pilha()
     []
-        
+    
+    >>> calc.enter('a')
+    'Entrada invalida.'
 """
 
 import operator as op
@@ -57,14 +59,17 @@ class RPN():
              }
     
     def visor(self):
-        """ Retorna Visor (�ltimo elemento da pilha) """
+        """ Retorna Visor (ultimo elemento da pilha) """
         return self._pilha[-1]
     
     def enter(self, value):
-        """ Recebe número ou operador. Se receber número guarda na ultima posicao da pilha. 
+        """ Recebe numero ou operador. Se receber numero guarda na ultima posicao da pilha. 
             Se receber operador, executa a operacao com os dois ultimos numeros da pilha"""
         if value not in self.OPS:
-            self._pilha.append(float(value))
+            if self.isnumber(value)==True:
+                self._pilha.append(float(value))
+            else:
+                return 'Entrada invalida.'
         elif value in self.OPS:
             if len(self._pilha)>=2:
                 resultado = self.OPS[value](self._pilha[-2],self._pilha[-1])
@@ -76,16 +81,22 @@ class RPN():
                 self._pilha[0] = resultado
                 self.limpapilha()
                 return resultado 
-                
-            else:
-                pass
             
     def pilha(self):
-        """ Mostra os itens da pilha """
-        print self._pilha
+        """ Mostra os itens da pilha. """
+        return self._pilha
     
     def limpapilha(self):
+        """ Apaga pilha. """
         self._pilha = []
+        
+    def isnumber(self,value):
+        """ Testa se value � um numero. Retorna True se for um numero. """
+        try:
+            float(value)
+            return True
+        except ValueError:
+            return False
                 
 if __name__ == "__main__":
     import doctest
